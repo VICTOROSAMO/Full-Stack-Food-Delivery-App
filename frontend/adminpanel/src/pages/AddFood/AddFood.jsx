@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { assets } from '../../assets/assets'
 import axios from 'axios';
+import { addFood } from '../../services/foodServices';
+import { toast } from 'react-toastify';
 
 const AddFood = () => {
 
@@ -21,27 +23,22 @@ const AddFood = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     if(!image){
-      alert('Please select an image')
+      toast.error('Please select an image')
       return
     }
 
-    const formData = new FormData();
-    formData.append('food', JSON.stringify(data))
-    formData.append('file', image)
-
-    try{
-      const response = await axios.post('http://localhost:8080/api/foods', formData, {headers: {"Content-Type": "multipart/form-data"}});
-
-      if(response.status === 200){
-        alert('Food added successfully')
-        setData({name:'', description:'', category:'Biryani', price:''})
-        setImage(null)
-      }
-    } catch(error){
-      console.log('Error:', error)
-      alert('Error adding food')
+    try {
+     await addFood(data, image);
+     toast.success('Food added successfully')
+     setData({name:'', description:'', category:'Biryani', price:''})
+     setImage(null)
+     
+    } catch (error) {
+      toast.error('Error adding food')
+      
     }
 
+  
   }
 
 
@@ -60,13 +57,13 @@ const AddFood = () => {
             <input type="file" className="form-control" id="image" hidden onChange={(e) => setImage(e.target.files[0])}/>
           </div>
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">Name</label>
-            <input type="text" className="form-control" id="name" required name='name' onChange={onChangeHandler} value={data.name} />
+            <label htmlFor="name"  className="form-label">Name</label>
+            <input type="text" placeholder="Chicken Biryani" className="form-control" id="name" required name='name' onChange={onChangeHandler} value={data.name} />
           </div>
           
           <div className="mb-3">
             <label htmlFor="description" className="form-label">Description</label>
-            <textarea className="form-control" id="description" rows="5" required name='description' onChange={onChangeHandler} value={data.description}></textarea>
+            <textarea className="form-control" placeholder="Write Content here..." id="description" rows="5" required name='description' onChange={onChangeHandler} value={data.description}></textarea>
           </div>
           <div className="mb-3">
             <label htmlFor="category" className="form-label">Category</label>
@@ -82,7 +79,7 @@ const AddFood = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="price" className="form-label">Price</label>
-            <input type="number" name="price" id="price" className='form-control' onChange={onChangeHandler} value={data.price} />
+            <input type="number" name="price" id="price" placeholder="&#75;&#83;&#104; 500" className='form-control' onChange={onChangeHandler} value={data.price} />
           </div>
           <button type="submit" className="btn btn-primary">Save</button>
         </form>
