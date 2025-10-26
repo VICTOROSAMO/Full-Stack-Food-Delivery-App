@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import './Cart.css'
 import { StoreContext } from '../../context/StoreContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+    const navigate = useNavigate();
 
-    const { foodList, increaseQty, decreaseQty, quantities } = useContext(StoreContext);
+    const { foodList, increaseQty, decreaseQty, quantities, removeFromCart } = useContext(StoreContext);
 
     //cart items
     const cartItems = foodList.filter((food) => quantities[food.id] > 0);
@@ -45,7 +47,7 @@ const Cart = () => {
                         </div>
                         <div className="col-md-2 text-end">
                             <p className="fw-bold">Ksh{(food.price * quantities[food.id]).toFixed(2)}</p>
-                            <button className="btn btn-sm btn-outline-danger">
+                            <button className="btn btn-sm btn-outline-danger" onClick={() => removeFromCart(food.id)}>
                                     <i className="bi bi-trash"></i>
                                 </button>
                         </div>
@@ -60,9 +62,9 @@ const Cart = () => {
             }
         
             <div className="text-start mb-4">
-                <a href="#" className="btn btn-outline-primary">
+                <Link to={`/`} className="btn btn-outline-primary">
                     <i className="bi bi-arrow-left me-2"></i>Continue Shopping
-                </a>
+                </Link>
             </div>
         </div>
         <div className="col-lg-4">
@@ -87,7 +89,7 @@ const Cart = () => {
                         <strong>Total</strong>
                         <strong>{subtotal === 0 ? 0.0 : total.toFixed(2)}</strong>
                     </div>
-                    <button className="btn btn-primary w-100" disabled={cartItems.length === 0}>Proceed to Checkout</button>
+                    <button className="btn btn-primary w-100" disabled={cartItems.length === 0} onClick={() => navigate('/order')}>Proceed to Checkout</button>
                 </div>
             </div>
          
