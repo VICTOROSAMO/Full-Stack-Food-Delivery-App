@@ -1,5 +1,8 @@
 package com.osamo.foodiesapi.service;
 
+import com.osamo.foodiesapi.io.CartRequest;
+import com.osamo.foodiesapi.io.CartResponse;
+
 public interface CartService {
-    void addToCart(String foodId);
+    CartResponse addToCart(CartRequest request);
 }
