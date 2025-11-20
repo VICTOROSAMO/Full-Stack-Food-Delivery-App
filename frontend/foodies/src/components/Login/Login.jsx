@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
-  const {setToken} = useContext(StoreContext)
+  const {setToken, loadCartData} = useContext(StoreContext)
   const [data, setData] = useState({
       email:'',
       password:''
@@ -27,7 +27,8 @@ const Login = () => {
            const response = await login(data)
            if (response.status === 200) {
              setToken(response.data.token)
-             localStorage.setItem("token", response.data.token)
+             localStorage.setItem("token", response.data.token);
+             await loadCartData(response.data.token)
              navigate("/")
            }else{
              toast.error("Unable to login. Please try again.")

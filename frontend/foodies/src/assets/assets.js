@@ -7,10 +7,12 @@ import icecream from './icecream.jpeg'
 import pizza from './pizza.jpeg'
 import rolls from './rolls.jpeg'
 import salad from './salad.jpeg'
+import profile from './profile.png'
 
 export const assets = {
     logo,
-    cart
+    cart,
+    profile
 }
 
 export const categories = [
